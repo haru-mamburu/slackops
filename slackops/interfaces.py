@@ -145,12 +145,12 @@ class Operation:
 
         self._post_to_parent_thread(status)
 
-    def finish(self, status: str) -> None:
+    def finish(self, status: str, severity: str = "success") -> None:
         end_time = datetime.now(self._timezone)
 
         finish_time = end_time.strftime(self.time_format)  # type: ignore
 
-        self.tmpl.construct(status=status, finished=finish_time)
+        self.tmpl.construct(status=status, finished=finish_time, severity=severity)
         self.client.chat_update(
             channel=self._channel_id, ts=self._parent_ts, **self.tmpl.unpack()
         )
