@@ -1,5 +1,5 @@
 # SlackOps
-Post process information to the slack without clogging up the channel with a bunch of messages. Easyly update status, see when oreration started / finished and how much time it took.
+Post process information to the slack without clogging up the channel with a bunch of messages. Easyly update status, see when operation started / finished and how much time it took.
 
 ## Installation
 ```bash
