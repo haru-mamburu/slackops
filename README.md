@@ -32,4 +32,5 @@ slack.finish("4. Application successfully updated!")
 ![4. Application successfully updated!](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/4-finish.png)
 
 Operation statuses also posted to thread.
+
 ![Thread messages](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/5-thread-messages.png)
