@@ -29,4 +29,5 @@ slack.update("3. Healthchecks")
 slack.finish("4. Application successfully updated!")
 ```
 ![Screenshot](/docs/images/4-finish.png)
+Operation statuses also posted to thread.
 ![Screenshot](/docs/images/5-thread-messages.png)
