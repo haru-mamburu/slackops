@@ -9,7 +9,7 @@ $ pip install slackops
 ```python
 import slackops
 
-slack = Operation(token=SLACK_BOT_TOKEN, channel=CHANNEL_NAME)
+slack = slackops.Operation(token=SLACK_BOT_TOKEN, channel=CHANNEL_NAME)
 
 slack.start("Application update", "Backup")
 ```
