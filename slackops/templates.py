@@ -9,7 +9,7 @@ def attachment(
 
 
 class Default:
-    """Simple 'interface' class to show which values are possible to set'"""
+    """Simple dict 'interface' class to show which values are possible to set'"""
 
     def __init__(self):
         self._dict = {}
