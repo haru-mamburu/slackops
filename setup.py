@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = "0.0.4"
+VERSION = "0.1.0"
 DESCRIPTION = "Easyly post good looking slack messages about your operations"
 LONG_DESCRIPTION = "Post process information to the slack without clogging up the channel with a bunch of messages. Easyly update status, see when oreration started / finished and how much time it took."
 
