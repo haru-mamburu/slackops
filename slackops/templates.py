@@ -1,17 +1,21 @@
-from .blocks import AttachmentTemplate
+from slack_sdk.models.attachments import BlockAttachment
+import blocks
 
-from datetime import datetime
 
-# simple 'interface' classes to show what default values
-# are possible to set. If you know better way do do it - pm me :)
+def attachment(
+    blocks: list, color: str = None, fallback: str = None
+) -> BlockAttachment:
+    return BlockAttachment(blocks=filter(None, blocks), color=color, fallback=fallback)  # type: ignore
 
 
 class Default:
+    """Simple 'interface' class to show which values are possible to set'"""
+
     def __init__(self):
-        self._defaults = {}
+        self._dict = {}
 
     def set(self, **kwargs) -> None:
-        """Set default value.
+        """Set value.
 
         Args:
             text (str, optional): Defaults to None.
@@ -22,26 +26,14 @@ class Default:
         """
         for k, v in kwargs.items():
             if v:
-                self._defaults[k] = v
+                self._dict[k] = v
 
     def get(self, k):
-        return self._defaults.get(k)
+        return self._dict.get(k)
 
 
 class Persistent(Default):
-    def __init__(self):
-        super().__init__()
-
-    def set(self, **kwargs) -> None:
-        """Set persistent value.
-
-        Args:
-            text (str, optional): Defaults to None.
-            severity (str, optional): Defaults to "info".
-            header (str, optional): Defaults to None.
-            context (list, optional): Defaults to None.
-        """
-        super().set(**kwargs)
+    pass
 
 
 COLORS = {
@@ -67,49 +59,65 @@ class Template:
         self.default = Default()
         self.default.set(severity_colors=COLORS)
 
-    def set_default_and_persistent_values(self, values: dict):
-        for k, v in values.items():
-            v = v or self.default.get(k)
-            p = self.persistent.get(k)
-            if p:
-                v = p + v if v else p
+    def apply_default_values(self, values: dict) -> dict:
+        return {k: v or self.default._dict.get(k) for k, v in values.items()}
 
-            values[k] = v
+    def apply_persistent_values(self, values: dict) -> dict:
+        for k, v in values.items():
+            pv = self.persistent.get(k)
+            if pv:
+                values[k] = pv + v if v else pv
         return values
 
     def unpack(self) -> dict:
-
-        template = {}
-        for k in ["attachments", "blocks", "text"]:
-            v = getattr(self, k, None)
-            if v:
-                template[k] = v
-                delattr(self, k)
-
-        return template
+        return {
+            "attachments": getattr(self, "attachments", None),
+            "blocks": getattr(self, "blocks", None),
+            "text": getattr(self, "text", None),
+        }
 
 
-class MessageTemplate(Template):
+class Message(Template):
     def __init__(self):
         super().__init__()
 
     def construct(
         self,
         text: str = None,
-        severity: str = None,
         header: str = None,
         context: list = None,
+        severity: str = None,
     ):
-        values = locals()
-        del values["self"]
+        values = self.apply_persistent_values(
+            self.apply_default_values(
+                {
+                    "severity": severity,
+                    "header": header,
+                    "text": text,
+                    "context": context,
+                }
+            )
+        )
 
-        values = self.set_default_and_persistent_values(values)
-        values["color"] = self.default.get(values.pop("severity"))
+        fallback = values["text"] or values["header"]
+        color = self.default.get("severity_colors")[severity]  # type: ignore
 
-        self.attachments = [AttachmentTemplate.message(**values)]
+        self.attachments = [
+            attachment(
+                blocks=[
+                    blocks.header(values.get("header")),
+                    blocks.text(values.get("text")),
+                    *blocks.context(values.get("context")),
+                ],
+                color=color,
+                fallback=fallback,
+            )
+        ]
+
+        return self.unpack()
 
 
-class OperationTemplate(Template):
+class Operation(Template):
     def __init__(self):
         super().__init__()
 
@@ -120,26 +128,58 @@ class OperationTemplate(Template):
             finished="*Finished:*\n",
         )
 
+        self.time_fmt = "<!date^{time}^{{date_short_pretty}} {{time_secs}}|:( no time>"
+
     def construct(
         self,
-        text: str = None,
         name: str = None,
-        severity: str = None,
-        header: str = None,
         status: str = None,
+        text: str = None,
+        header: str = None,
         context: list = None,
-        started: datetime = None,
-        finished: str = None,
+        started: float = None,
+        finished: float = None,
+        severity: str = None,
     ):
-        values = locals()
-        del values["self"]
-
-        values = self.set_default_and_persistent_values(values)
-        severity = values.pop("severity")
-        severity_colors = self.default.get("severity_colors") or {}
-        values["color"] = severity_colors.get(severity)
-
-        if values["finished"] == self.persistent.get("finished"):
+        values = self.apply_default_values(
+            {
+                "severity": severity,
+                "header": header,
+                "text": text,
+                "context": context,
+                "name": name,
+                "status": status,
+                "started": started,
+                "finished": finished,
+            }
+        )
+        if not values["finished"]:
             del values["finished"]
+        else:
+            values["finished"] = self.time_fmt.format(time=int(values["finished"]))
 
-        self.attachments = [AttachmentTemplate.operation(**values)]
+        values["started"] = self.time_fmt.format(time=int(values["started"]))
+
+        fallback = values["status"]
+        color = self.default.get("severity_colors")[severity]  # type: ignore
+
+        values = self.apply_persistent_values(values)
+        self.attachments = [
+            attachment(
+                blocks=[
+                    blocks.header(values["header"]),
+                    blocks.text(values["text"]),
+                    blocks.operation(
+                        name=values["name"],
+                        status=values["status"],
+                        started=values["started"],
+                        finished=values.get("finished"),
+                    ),
+                    *blocks.context(values["context"]),
+                ],
+                color=color,
+                fallback=fallback,
+            )
+        ]
+
+        return self.unpack()
