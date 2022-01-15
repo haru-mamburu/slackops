@@ -13,7 +13,8 @@ slack = slackops.Operation(token=SLACK_BOT_TOKEN, channel=CHANNEL_NAME)
 
 slack.start("Application update", "Backup")
 ```
-![Screenshot](/docs/images/1-start.png)
+
+![1. Start](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/1-start.png)
 
 ```python
 slack.update("2. Updating application")
