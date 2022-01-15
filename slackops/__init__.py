@@ -1,1 +1,1 @@
-from interfaces import Operation, Message
+from .interfaces import Operation, Message

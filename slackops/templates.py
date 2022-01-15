@@ -1,5 +1,5 @@
 from slack_sdk.models.attachments import BlockAttachment
-import blocks
+from . import blocks
 
 
 def attachment(

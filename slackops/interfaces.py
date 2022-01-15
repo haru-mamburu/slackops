@@ -4,7 +4,7 @@ import time
 from slack_sdk.web.client import WebClient
 from slack_sdk.web.slack_response import SlackResponse
 
-import templates
+from . import templates
 
 
 class Message:
