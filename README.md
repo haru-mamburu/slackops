@@ -19,16 +19,17 @@ slack.start("Application update", "Backup")
 ```python
 slack.update("2. Updating application")
 ```
-![Screenshot](/docs/images/2-update.png)
+![2. Updating application"](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/2-update.png)
 
 ```python
 slack.update("3. Healthchecks")
 ```
-![Screenshot](/docs/images/3-update.png)
+![3. Healthchecks](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/3-update.png)
 
 ```python
 slack.finish("4. Application successfully updated!")
 ```
-![Screenshot](/docs/images/4-finish.png)
+![4. Application successfully updated!](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/4-finish.png)
+
 Operation statuses also posted to thread.
-![Screenshot](/docs/images/5-thread-messages.png)
+![Thread messages](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/5-thread-messages.png)
