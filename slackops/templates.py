@@ -80,6 +80,7 @@ class Template:
 class Message(Template):
     def __init__(self):
         super().__init__()
+        self.default.set(severity="info")
 
     def construct(
         self,
@@ -100,7 +101,7 @@ class Message(Template):
         )
 
         fallback = values["text"] or values["header"]
-        color = self.default.get("severity_colors")[severity]  # type: ignore
+        color = self.default.get("severity_colors")[values["severity"]]  # type: ignore
 
         self.attachments = [
             attachment(

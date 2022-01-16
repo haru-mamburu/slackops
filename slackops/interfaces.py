@@ -22,7 +22,7 @@ class Message:
     def post(
         self,
         text: str = None,
-        severity: str = "info",
+        severity: str = None,
         header: str = None,
         context: list = None,
         channel: str = None,
