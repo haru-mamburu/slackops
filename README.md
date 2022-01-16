@@ -55,7 +55,7 @@ slack.post(
 )
 ```
 
-![message](/docs/images/message.png)
+![message](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/message.png)
 
 
 ## Formatting. Default and persistent values
@@ -67,7 +67,7 @@ slack.tmpl.default.set(severity="success")
 slack.post("If no value is passed, the default value will be used (if available).")
 ```
 
-![default values](/docs/images/default_values.png)
+![default values](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/default_values.png)
 
 And persistent values:
 ```python
@@ -77,7 +77,7 @@ slack.tmpl.persistent.set(text="*Details:*\n")
 slack.post("username: haru\n ", header="new user!")
 ```
 
-![persistent values](/docs/images/persistent_values.png)
+![persistent values](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/persistent_values.png)
 
 ## AWS Lambda
 In progress...
