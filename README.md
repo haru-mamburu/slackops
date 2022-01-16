@@ -80,4 +80,12 @@ slack.post("username: haru\n ", header="new user!")
 ![persistent values](https://raw.githubusercontent.com/haru-mamburu/slackops/master/docs/images/persistent_values.png)
 
 ## AWS Lambda
-In progress...
+To use 'Operation' template beetwen different lamdas, you can do following:
+1. Export in first lambda:
+```python
+packed_operation = slack.pack()
+```
+2. And import in second lambda:
+```python
+slack = slackops.Operation(packed_operation=packed_operation)
+```
