@@ -29,6 +29,9 @@ class Message:
     ) -> None:
         """Post simple message to Slack
 
+        Args:
+            severity (str): Sets message color. Possible values: info | success | warning | error
+
         Note:
             - If no value is passed, the default value will be used (if available).
             - If there is no default/persistent value found - that part of the template will not be rendered.
