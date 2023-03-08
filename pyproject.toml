@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "slackops"
-version = "0.1.5"
+version = "0.1.6"
 description = "Easily post good looking slack messages about your operations"
 authors = ["Eremin <haru.eaa@gmail.com>"]
 readme = "README.md"
