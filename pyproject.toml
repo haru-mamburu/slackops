@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "slackops"
+version = "0.1.5"
+description = "Easily post good looking slack messages about your operations"
+authors = ["Eremin <haru.eaa@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9.0"
+slack-sdk = "^3.20.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
